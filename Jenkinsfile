@@ -7,6 +7,18 @@ pipeline {
                 git branch: 'main', url: 'https://github.com/prabhgill02/Jenkins.git'
             }
         }
+        
+        stage('Install Dependencies') {
+            steps {
+                script {
+                    // Install pytest
+                    powershell '''
+                        python -m pip install
+                        pip install pytest
+                    '''
+                }
+            }
+        }    
 
         stage('Build') {
             steps {
@@ -17,16 +29,17 @@ pipeline {
         stage('Test') {
             steps {
                 echo 'Running tests...'
-                sh 'pytest || true'
-            }
-        }
-
-        stage('Notify') {
-            steps {
-                mail to: 'prabhdeepsinghgill1@gmail.com',
-                     subject: 'Jenkins Build Notification',
-                     body: "The Jenkins build has completed. Check Jenkins for details."
+                powershell 'pytest'
             }
         }
     }
+
+    post {
+        success {
+            echo "Deployment successful!"
+        }
+        failure {
+            echo "Deployment failed."
+        }
+    }    
 }
