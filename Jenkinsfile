@@ -32,14 +32,30 @@ pipeline {
                 powershell 'pytest'
             }
         }
-    }
 
-    post {
-        success {
-            echo "Deployment successful!"
+        stage('Run Application') {
+            steps {
+                script {
+                    // Run the Python app (app.py)
+                    echo "Running the Python application..."
+                    powershell script: '''
+                    python app.py
+                    '''
+                }
+            }
         }
-        failure {
-            echo "Deployment failed."
-        }
+
+         stage('Notify') {
+            steps {
+                script {
+                    // Send notifications based on the result of the pipeline
+                    if (currentBuild.result == 'SUCCESS') {
+                        echo "Build succeeded!"
+                    } else {
+                        echo "Build failed!"
+                    }
+                }
+            }
+        }               
     }    
 }
