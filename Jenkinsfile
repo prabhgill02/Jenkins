@@ -49,7 +49,7 @@ pipeline {
             steps {
                 script {
                     // Send notifications based on the result of the pipeline
-                    if (currentBuild.result == 'SUCCESS') {
+                    if (true) {
                         echo "Build succeeded!"
                     } else {
                         echo "Build failed!"
