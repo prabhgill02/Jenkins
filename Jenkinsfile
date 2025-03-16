@@ -13,7 +13,6 @@ pipeline {
                 script {
                     // Install pytest
                     powershell '''
-                        python -m pip install
                         pip install pytest
                     '''
                 }
